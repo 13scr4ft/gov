@@ -1,7 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Transparent status bar & white status icons (clock/battery)
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark, // White clock/battery text on iOS
+    ),
+  );
+
+  // Forces app layout to stretch edge-to-edge behind top notch and bottom bar
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   runApp(const GovWalletDemoApp());
 }
 
@@ -22,7 +37,7 @@ class GovWalletDemoApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const SplashScreen(), // App launches with the splash screen
+      home: const SplashScreen(),
     );
   }
 }
@@ -52,7 +67,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Wait 2.5 seconds, then fade smoothly into the HomeScreen
     Timer(const Duration(milliseconds: 2500), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
@@ -74,10 +88,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF073574),
       body: SizedBox.expand(
         child: Image.asset(
           'assets/images/splash_logo.png',
-          fit: BoxFit.cover, // Fills full screen edge-to-edge
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -268,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: const Padding(
                         padding: EdgeInsets.fromLTRB(24, 12, 22, 12),
                         child: Align(
-                          alignment: Alignment.topLeft, // Left-aligned
+                          alignment: Alignment.topLeft,
                           child: Text(
                             'Δελτίο Ταυτότητας',
                             textAlign: TextAlign.left,
@@ -681,7 +696,7 @@ class IdentityScreen extends StatelessWidget {
                   pinned: true,
                   backgroundColor: AppColors.blue,
                   elevation: 0,
-                  centerTitle: true, // Top Middle alignment
+                  centerTitle: true,
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back, size: 32),
                     onPressed: () => Navigator.pop(context),
