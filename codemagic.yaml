@@ -1,0 +1,137 @@
+workflows:
+  flutter-android:
+    name: Flutter Android 
+    instance_type: mac_mini_m2 # Other available machine types: mac_mini_m4, mac_studio_m4_max, linux_x2, linux_x4, windows_x2
+    max_build_duration: 120
+    environment:
+      android_signing:
+        - codemagic_keystore
+      groups:
+        - google_play # <-- (Includes GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS)
+      vars:
+        PACKAGE_NAME: "io.codemagic.flutter" # <-- Put your package name here
+        GOOGLE_PLAY_TRACK: "internal"
+      flutter: stable
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Build AAB with Flutter
+        script: |
+            LATEST_BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK")))      
+            flutter build appbundle --release \
+              --build-name=1.0.$LATEST_BUILD_NUMBER \
+              --build-number=$LATEST_BUILD_NUMBER
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: $GOOGLE_PLAY_TRACK
+        submit_as_draft: true
+
+  flutter-ios:
+    name: Flutter iOS Workflow
+    instance_type: mac_mini_m2 # Other available machine types: mac_mini_m4, mac_studio_m4_max
+    max_build_duration: 120
+    integrations:
+      app_store_connect: codemagic_samples
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: io.codemagic.flutter
+      flutter: stable
+      xcode: latest # <-- set to specific version e.g. 14.3, 15.0 to avoid unexpected updates.
+      cocoapods: default
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Build versioning
+        script: |
+            cd ./ios
+            agvtool new-version -all $(($BUILD_NUMBER))
+            agvtool new-marketing-version 1.0.$(($BUILD_NUMBER))
+      - name: Flutter build ipa and automatic versioning
+        script: |
+          flutter build ipa --release \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      # See the following link for details about email publishing - https://docs.codemagic.io/publishing-yaml/distribution/#email
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true # To receive a notification when a build succeeds
+          failure: false # To not receive a notification when a build fails
+      slack:
+        # See the following link about how to connect your Slack account - https://docs.codemagic.io/publishing-yaml/distribution/#slack
+        channel: "#builds"
+        notify_on_build_start: true # To receive a notification when a build starts
+        notify:
+          success: true # To receive a notification when a build succeeds
+          failure: false # To not receive a notification when a build fails
+      app_store_connect:
+        auth: integration
+        
+        # Configuration related to TestFlight (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_testflight: true
+        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+          - group name 1
+          - group name 2
+
+        # Configuration related to App Store (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_app_store: false
+
+  web-workflow:
+    name: Web app workflow
+    max_build_duration: 10
+    environment:
+      flutter: stable
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter unit tests
+        script: |
+          flutter test
+      - name: Flutter build webapp
+        script: |
+          flutter build web --release
+          cd build/web
+          7z a -r ../web.zip ./*
+    artifacts:
+      - build/web.zip
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
