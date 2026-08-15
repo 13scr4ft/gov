@@ -1,20 +1,20 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Transparent status bar & white status icons (clock/battery)
+  // Transparent status bar & white status icons (clock/battery) - Native apps
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark, // White clock/battery text on iOS
+      statusBarBrightness: Brightness.dark,
     ),
   );
 
-  // Forces app layout to stretch edge-to-edge behind top notch and bottom bar
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   runApp(const GovWalletDemoApp());
@@ -27,7 +27,7 @@ class GovWalletDemoApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Gov Wallet Demo',
+      title: 'Gov.gr Wallet',
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Arial',
@@ -54,7 +54,7 @@ class AppColors {
 }
 
 // ==========================================
-// 1. SPLASH SCREEN (Full Screen Edge-to-Edge)
+// 1. SPLASH SCREEN
 // ==========================================
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           const _WalletBackground(),
-          SafeArea(
+          Positioned.fill(
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(child: _topBar()),
@@ -139,6 +139,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SliverToBoxAdapter(child: _servicesRow()),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 28, 24, 0),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: const Text(
+                            'Πολιτική Προστασίας Προσωπικών Δεδομένων',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white54,
+                              fontSize: 14,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.white54,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        const Text(
+                          'Έκδοση εφαρμογής 3.4.1 (139)',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 const SliverToBoxAdapter(child: SizedBox(height: 110)),
               ],
             ),
@@ -177,24 +208,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _topBar() {
     final width = MediaQuery.sizeOf(context).width;
     final compact = width < 390;
+    final topPadding = MediaQuery.paddingOf(context).top;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        compact ? 18 : 24,
-        10,
-        compact ? 12 : 16,
-        8,
+        compact ? 14 : 18,
+        topPadding + 8,
+        compact ? 10 : 14,
+        6,
       ),
       child: Row(
         children: [
-          const Icon(Icons.menu, size: 40, color: Colors.white),
-          const SizedBox(width: 18),
+          const Icon(Icons.menu, size: 32, color: Colors.white),
+          const SizedBox(width: 12),
           Text.rich(
             TextSpan(
               style: TextStyle(
-                fontSize: compact ? 31 : 35,
+                fontSize: compact ? 26 : 30,
                 fontWeight: FontWeight.w700,
-                letterSpacing: -1.5,
+                letterSpacing: -1.2,
                 color: Colors.white,
               ),
               children: const [
@@ -209,14 +241,14 @@ class _HomeScreenState extends State<HomeScreen> {
           const Spacer(),
           Image.asset(
             'assets/icons/ai_assistant.png',
-            width: compact ? 46 : 50,
-            height: compact ? 46 : 50,
+            width: compact ? 38 : 42,
+            height: compact ? 38 : 42,
           ),
-          SizedBox(width: compact ? 6 : 8),
+          SizedBox(width: compact ? 4 : 6),
           Text.rich(
             TextSpan(
               style: TextStyle(
-                fontSize: compact ? 21 : 25,
+                fontSize: compact ? 18 : 22,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
@@ -229,11 +261,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          SizedBox(width: compact ? 7 : 12),
+          SizedBox(width: compact ? 6 : 10),
           Image.asset(
             'assets/icons/notification.png',
-            width: 52,
-            height: 52,
+            width: 44,
+            height: 44,
           ),
         ],
       ),
@@ -251,8 +283,8 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Container(
             height: MediaQuery.sizeOf(context).width < 390 ? 205 : 220,
-            margin: EdgeInsets.symmetric(
-              horizontal: MediaQuery.sizeOf(context).width < 390 ? 18 : 18,
+            margin: const EdgeInsets.symmetric(
+              horizontal: 18,
               vertical: 8,
             ),
             decoration: BoxDecoration(
@@ -303,18 +335,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'DEMO-4827',
-                              style: TextStyle(
-                                color: Color(0xFF252B34),
+                            Text(
+                              'A00970948',
+                              style: GoogleFonts.robotoMono(
+                                color: const Color(0xFF252B34),
                                 fontSize: 27,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w500,
                                 letterSpacing: 2,
                               ),
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'Εκδόθηκε: 08/2026',
+                              'Ημ. Έκδοσης: 16/05/2024',
                               style: TextStyle(
                                 color: Colors.grey.shade600,
                                 fontSize: 16,
@@ -405,33 +437,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _sectionHeader(String title, String action) {
     final compact = MediaQuery.sizeOf(context).width < 390;
+    final isLong = title.length > 12 || action.length > 12;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        compact ? 18 : 18,
+        compact ? 14 : 18,
         6,
-        compact ? 18 : 18,
+        compact ? 14 : 18,
         10,
       ),
       child: Row(
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: compact ? 22 : 25,
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: compact ? (isLong ? 15 : 18) : (isLong ? 18 : 22),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-          const Spacer(),
+          const SizedBox(width: 4),
           Text(
             action,
-            style: const TextStyle(
-              fontSize: 19,
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: compact ? (isLong ? 13 : 16) : (isLong ? 16 : 18),
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(width: 6),
-          const Icon(Icons.chevron_right, size: 28, color: AppColors.cyan),
+          const SizedBox(width: 2),
+          const Icon(Icons.chevron_right, size: 24, color: AppColors.cyan),
         ],
       ),
     );
@@ -441,9 +479,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       height: 132,
       child: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.sizeOf(context).width < 390 ? 18 : 18,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         scrollDirection: Axis.horizontal,
         children: [
           _walletTile(
@@ -528,9 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       height: 228,
       child: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.sizeOf(context).width < 390 ? 18 : 18,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
         scrollDirection: Axis.horizontal,
         children: [
           _noticeCard(
@@ -689,7 +723,7 @@ class IdentityScreen extends StatelessWidget {
       body: Stack(
         children: [
           const _IdentityBackground(),
-          SafeArea(
+          Positioned.fill(
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
@@ -730,8 +764,8 @@ class IdentityScreen extends StatelessWidget {
 
   Widget _identityHero() {
     const heroHeight = 220.0;
-    const avatarSize = 150.0;
-    const avatarOverflow = 0.08;
+    const avatarSize = 175.0;
+    const avatarTop = 57.0; // aligns with the 'Αριθμός ταυτότητας' label
 
     return SizedBox(
       height: heroHeight,
@@ -743,39 +777,50 @@ class IdentityScreen extends StatelessWidget {
             height: heroHeight,
             padding: const EdgeInsets.fromLTRB(28, 16, 178, 16),
             color: AppColors.blue,
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Αριθμός ταυτότητας:',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: Colors.white70,
                   ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  'DEMO-4827',
-                  style: TextStyle(
-                    fontSize: 31,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 2,
+                const SizedBox(height: 4),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'A00970948',
+                    maxLines: 1,
+                    style: GoogleFonts.robotoMono(
+                      fontSize: 31,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 2,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   'Ημ. Έκδοσης:',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: Colors.white70,
                   ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  '08/2026',
+                const SizedBox(height: 2),
+                const Text(
+                  '16/05/2024',
                   style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 16,
+                    color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -783,8 +828,8 @@ class IdentityScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: heroHeight - avatarSize * (1 - avatarOverflow),
-            right: 28,
+            top: avatarTop,
+            right: 10,
             child: const _DemoAvatar(size: avatarSize),
           ),
         ],
@@ -799,26 +844,56 @@ class IdentityScreen extends StatelessWidget {
         children: [
           _actionButtons(),
           const SizedBox(height: 32),
-          _field('ΕΠΩΝΥΜΟ', 'ΔΗΜΟΠΟΥΛΟΣ'),
-          _field('SURNAME', 'DEMOPOULOS'),
-          _field('ΟΝΟΜΑ', 'ΝΙΚΟΣ'),
-          _field('GIVEN NAME', 'NIKOS'),
-          _field('ΟΝΟΜΑ ΠΑΤΕΡΑ', 'ΑΛΕΞΑΝΔΡΟΣ'),
-          _field('ΟΝΟΜΑ ΜΗΤΕΡΑΣ (MOTHER’S NAME)', 'ΕΛΕΝΗ'),
-          _field('ΗΜ. ΓΕΝΝΗΣΗΣ (DATE OF BIRTH)', '12/05/1998'),
-          _field('ΤΟΠΟΣ ΓΕΝΝΗΣΗΣ (PLACE OF BIRTH)', 'ΑΘΗΝΑ'),
+          _field('ΕΠΩΝΥΜΟ', 'ΑΠΟΣΤΟΛΙΔΗΣ'),
+          _field('SURNAME', 'APOSTOLIDIS'),
+          _field('ΟΝΟΜΑ', 'ΠΑΝΑΓΙΩΤΗΣ'),
+          _field('GIVEN NAME', 'PANAGIOTIS'),
+          _field('ΟΝΟΜΑ ΠΑΤΕΡΑ', 'ΣΤΥΛΙΑΝΟΣ'),
+          _field('ΟΝΟΜΑ ΜΗΤΕΡΑΣ (MOTHER’S NAME)', 'ΧΡΥΣΟΥΛΑ'),
+          _field('ΗΜ. ΓΕΝΝΗΣΗΣ (DATE OF BIRTH)', '6/11/2007'),
+          _field('ΤΟΠΟΣ ΓΕΝΝΗΣΗΣ (PLACE OF BIRTH)', 'ΘΕΣΣΑΛΟΝΙΚΗ'),
           _field(
             'ΑΡΧΗ ΕΚΔΟΣΗΣ (ISSUANCE OFFICE)',
-            'Τ.Α. ΑΘΗΝΩΝ',
+            'Τ.Α. ΧΑΡΙΛΑΟΥ',
           ),
           const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Flexible(
+                child: Text(
+                  'Κωδικός εγγράφου: b0fsVEDXNrZ0GEAwwNjuvQ',
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(
+                    const ClipboardData(text: 'b0fsVEDXNrZ0GEAwwNjuvQ'),
+                  );
+                },
+                child: const Icon(
+                  Icons.copy,
+                  size: 15,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
           const Text(
-            'DEMO • Δεν αποτελεί επίσημο κρατικό έγγραφο',
+            'Δεν αποτελεί διεθνές ταξιδιωτικό έγγραφο\nNot an international travel document',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white70,
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
+              color: Colors.white54,
+              fontSize: 13,
+              height: 1.4,
             ),
           ),
         ],
@@ -874,18 +949,27 @@ class IdentityScreen extends StatelessWidget {
   ) {
     return Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(16),
       child: InkWell(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         onTap: onTap,
-        child: SizedBox(
-          height: 86,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.contain,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.black.withOpacity(.16),
+              width: 1.3,
             ),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 12,
+          ),
+          child: Image.asset(
+            imagePath,
+            width: double.infinity,
+            fit: BoxFit.fitWidth,
+            alignment: Alignment.centerLeft,
           ),
         ),
       ),
@@ -1066,11 +1150,19 @@ class _DemoAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFE9EDF1),
         borderRadius: BorderRadius.circular(size * .18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(.14),
+            blurRadius: 22,
+            spreadRadius: 1,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Icon(
-        Icons.person,
-        size: size * .58,
-        color: const Color(0xFF667384),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(
+        'assets/images/id_photo.png',
+        fit: BoxFit.cover,
       ),
     );
   }

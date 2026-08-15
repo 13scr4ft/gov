@@ -1,7 +1,17 @@
-2026/08/14-21:46:14.922 df4 Reusing MANIFEST C:\Users\panos\AppData\Local\Temp\flutter_tools.11a8b4ba\flutter_tools_chrome_device.4281e405\Default\shared_proto_db/MANIFEST-000001
-2026/08/14-21:46:14.923 df4 Recovering log #13
-2026/08/14-21:46:14.923 df4 Reusing old log C:\Users\panos\AppData\Local\Temp\flutter_tools.11a8b4ba\flutter_tools_chrome_device.4281e405\Default\shared_proto_db/000013.log 
-2026/08/14-21:46:14.924 df4 Delete type=0 #3
-2026/08/14-21:46:14.924 df4 Delete type=0 #4
-2026/08/14-21:46:14.924 df4 Delete type=0 #7
-2026/08/14-21:46:14.924 df4 Delete type=0 #10
+2026/08/15-03:46:34.575 a428 Reusing MANIFEST C:\Users\panos\AppData\Local\Temp\flutter_tools.3ca11aab\flutter_tools_chrome_device.f560cb3\Default\shared_proto_db/MANIFEST-000001
+2026/08/15-03:46:34.575 a428 Recovering log #23
+2026/08/15-03:46:34.577 a428 Reusing old log C:\Users\panos\AppData\Local\Temp\flutter_tools.3ca11aab\flutter_tools_chrome_device.f560cb3\Default\shared_proto_db/000023.log 
+2026/08/15-03:46:34.577 a428 Delete type=0 #3
+2026/08/15-03:46:34.577 a428 Delete type=0 #4
+2026/08/15-03:46:34.577 a428 Delete type=0 #7
+2026/08/15-03:46:34.577 a428 Delete type=2 #8
+2026/08/15-03:46:34.577 a428 Delete type=0 #10
+2026/08/15-03:46:34.577 a428 Delete type=2 #11
+2026/08/15-03:46:34.577 a428 Delete type=0 #13
+2026/08/15-03:46:34.577 a428 Delete type=2 #14
+2026/08/15-03:46:34.578 a428 Delete type=0 #16
+2026/08/15-03:46:34.578 a428 Delete type=2 #17
+2026/08/15-03:46:34.578 a428 Delete type=0 #19
+2026/08/15-03:46:47.221 375c Level-0 table #27: started
+2026/08/15-03:46:47.224 375c Level-0 table #27: 135796 bytes OK
+2026/08/15-03:46:47.226 375c Delete type=0 #23
