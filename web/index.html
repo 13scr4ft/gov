@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="/">
+  <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -29,6 +29,7 @@
       height: 100%;
       height: -webkit-fill-available;
       height: 100dvh;
+      height: calc(var(--app-height, 100vh));
       background-color: #073574;
       overflow: hidden;
       position: fixed;
@@ -46,6 +47,25 @@
   </style>
 </head>
 <body style="background-color: #073574;">
+  <script>
+    // iOS standalone PWAs sometimes report window.innerHeight as the
+    // height *excluding* the status bar area, even with viewport-fit=cover
+    // and black-translucent set. This measures the real usable height
+    // (via visualViewport when available) and feeds it back in as a CSS
+    // variable so html/body/flutter-view actually stretch full-screen.
+    function setAppHeight() {
+      var h = (window.visualViewport && window.visualViewport.height)
+        ? window.visualViewport.height
+        : window.innerHeight;
+      document.documentElement.style.setProperty('--app-height', h + 'px');
+    }
+    setAppHeight();
+    window.addEventListener('resize', setAppHeight);
+    window.addEventListener('orientationchange', setAppHeight);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', setAppHeight);
+    }
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
